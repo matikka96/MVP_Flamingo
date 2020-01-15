@@ -1,7 +1,11 @@
 import "./App.css";
+import Timer from "./Timer";
 import React, { Component } from "react";
+import Slider from '@material-ui/core/Slider';
+import ReactTimeout from 'react-timeout';
 
 class App extends Component {
+    
   state = {
     rangeValue: 1,
     targets: [
@@ -10,7 +14,8 @@ class App extends Component {
       { name: "mercedes", price: 30000 }
     ],
     selectedTarget: "",
-    savings: []
+    savings: [],
+    on: false
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -22,7 +27,6 @@ class App extends Component {
   handleNewSaving = (target, amount) => {
     this.setState({
       savings: [...this.state.savings, { target, amount }],
-      rangeValue: 1
     });
   };
 
@@ -34,9 +38,37 @@ class App extends Component {
   };
 
   render() {
+      
+    //var child = React.createRef();
+      
+    const handleChange = (event, newValue) => {
+        this.setState({ rangeValue : newValue});
+    };
+      
+    const handleChangeCommit = (event, newValue) => {
+        document.getElementById("TransactionSlider").style.display = 'none';
+        document.getElementById("cancelTimer").style.display = 'flex';
+        
+        this.timer = setTimeout(() => {this.setState({on: !this.state.on});this.handleNewSaving(this.state.selectedTarget.name,this.state.rangeValue);document.getElementById("TransactionSlider").style.display = 'flex';document.getElementById("cancelTimer").style.display = 'none';},3000);
+        
+    };
+      
+    const handleCancelTimer = () => {
+        this.setState({ on: false} );
+        clearTimeout(this.timer);
+        document.getElementById("cancelTimer").style.display = 'none';
+        document.getElementById("TransactionSlider").style.display = 'flex';
+    };
+      
+    let sliderSytle = {
+        cursor: "pointer",
+        color: "#daa520"
+    }
+      
     return (
       <div className="App">
         <select
+          className="SelectTarget"
           id="input-target"
           placeholder="Select target"
           value={this.state.targets.indexOf(this.state.selectedTarget)}
@@ -49,35 +81,28 @@ class App extends Component {
             <option value={index}>{t.name}</option>
           ))}
         </select>
+        <div className="CancelTimer" id="cancelTimer">
+            <button className="cancelButton" onClick={handleCancelTimer}>Cancel</button>
+        </div>
         {this.state.selectedTarget === "" ? (
-          <h1>Please select target</h1>
+          <p className="greetingMessage">Please select target</p>
         ) : (
-          <div>
-            <h1>{this.state.rangeValue}€</h1>
-            <input
-              style={{ zoom: "2" }}
-              type="range"
-              min="1"
-              max={this.state.selectedTarget.price / 10}
-              value={this.state.rangeValue}
-              onChange={e => this.setState({ rangeValue: e.target.value })}
-            ></input>
-            <div>
-              <button
-                onClick={() =>
-                  this.handleNewSaving(
-                    this.state.selectedTarget.name,
-                    this.state.rangeValue
-                  )
-                }
-              >
-                Save money
-              </button>
-            </div>
-          </div>
+                <Slider
+                    id="TransactionSlider"
+                    className="Slider"
+                    orientation="vertical"
+                    min={1}
+                    max={this.state.selectedTarget.price / 10}
+                    defaultValue={1}
+                    onChange={handleChange}
+                    onChangeCommitted={handleChangeCommit}
+                    dotStyle={{ borderColor: 'red' }}
+                    railStyle={{ backgroundColor: "#daa520", width: 50}}
+                    valueLabelDisplay="auto"
+                />
         )}
         {this.state.savings.length === 0 ? null : (
-          <div>
+            <div className="SavingsList">
             <h3>Savings:</h3>
             {this.state.savings.reverse().map((s, index) => (
               <div>
@@ -100,3 +125,5 @@ class App extends Component {
 }
 
 export default App;
+
+//<h1>{this.state.rangeValue}€</h1>
