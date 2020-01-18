@@ -39,5 +39,9 @@
 }
 
 .cancelButton {
-    background-color: goldenrod;
+    margin-top: 30px;
+    font-size: 24pt;
+    background-color: steelblue;
+    border-color: steelblue;
+    border-style: hidden;
 }

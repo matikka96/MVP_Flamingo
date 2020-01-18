@@ -3,6 +3,7 @@ import Timer from "./Timer";
 import React, { Component } from "react";
 import Slider from '@material-ui/core/Slider';
 import ReactTimeout from 'react-timeout';
+import cancel from './JavaScript_XD/skins/ocs_cancel.png';
 
 class App extends Component {
     
@@ -82,7 +83,7 @@ class App extends Component {
           ))}
         </select>
         <div className="CancelTimer" id="cancelTimer">
-            <button className="cancelButton" onClick={handleCancelTimer}>Cancel</button>
+            <button className="cancelButton" onClick={handleCancelTimer}><img style={{height:100, width:100}} src={cancel}/></button>
         </div>
         {this.state.selectedTarget === "" ? (
           <p className="greetingMessage">Please select target</p>
