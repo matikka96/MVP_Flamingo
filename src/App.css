@@ -1,43 +1,77 @@
 .App {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    height: 100vh;
-    background-color: steelblue;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100vh;
+  background-color: steelblue;
 }
 
 .greetingMessage {
-    font-size: 28pt;
-    color: goldenrod;
+  font-size: 28pt;
+  color: goldenrod;
 }
 
 .SelectTarget {
-    align-self: center;
-    align-content: center;
-    background-color: goldenrod;
-    margin-top: 30px;
+  align-self: center;
+  align-content: center;
+  background-color: goldenrod;
+  margin-top: 30px;
 }
 
 .Slider {
-    align-self: center;
-    margin-top: 30px;
-    margin-bottom: 50px;
-    flex-grow: 2;
+  align-self: center;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  flex-grow: 2;
 }
 
 .SavingsList {
-    align-self: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    height: 20em;
+  align-self: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  height: 20em;
 }
 
 .CancelTimer {
-    display: none;
-    align-self: center;
+  display: none;
+  align-self: center;
 }
 
 .cancelButton {
-    background-color: goldenrod;
+  background-color: goldenrod;
+}
+
+.slider {
+  background-color: blueviolet;
+}
+.slider-thumb {
+  background-color: gold;
+  width: 4rem;
+  height: 4rem;
+  top: -2rem;
+  right: -2rem;
+  border-radius: 50%;
+  line-height: 4rem;
+}
+.slider-track {
+  background-color: black;
+  height: 1px;
+}
+.vertical-slider {
+  height: 100%;
+}
+
+.slider-container {
+  background-color: black;
+  width: 1px;
+  height: 100%;
+  margin: 0 auto;
+}
+.app-header {
+  height: 50vh;
+}
+.app-footer {
+  height: 50vh;
+  /* background-color: cyan; */
 }
