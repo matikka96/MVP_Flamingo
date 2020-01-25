@@ -5,6 +5,7 @@
   "homepage": "https://tikka.dev/flamingo/alpha/",
   "dependencies": {
     "@material-ui/core": "^4.8.3",
+    "bootstrap": "^4.4.1",
     "pretty-ms": "^5.1.0",
     "rc-slider": "^8.7.1",
     "react": "^16.12.0",

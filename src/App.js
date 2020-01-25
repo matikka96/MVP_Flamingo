@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { Component } from "react";
 import ReactSlider from "react-slider";
+import "bootstrap/dist/css/bootstrap.css";
 // import Slider from "@material-ui/core/Slider";
 // import Slider, { createSliderWithTooltip } from "rc-slider";
 // import ReactSlider from "rc-slider";
@@ -12,7 +13,7 @@ import ReactSlider from "react-slider";
 
 class App extends Component {
   state = {
-    rangeValue: 1,
+    rangeValue: 0,
     targets: [
       { name: "hoodie", price: 30 },
       { name: "playstation", price: 300 },
@@ -25,14 +26,32 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedTarget !== this.state.selectedTarget) {
-      this.setState({ rangeValue: 1 });
+      console.log("target changed");
+      this.setState({ rangeValue: 0 });
     }
+  }
+
+  componentDidMount() {
+    document.body.ontouchmove = e => {
+      e.preventDefault();
+    };
   }
 
   handleNewSaving = (target, amount) => {
     this.setState({
-      savings: [...this.state.savings, { target, amount }]
+      savings: [...this.state.savings, { target, amount: amount / 10 }]
     });
+    let value = this.state.rangeValue;
+    var interval = setInterval(() => {
+      value = this.state.rangeValue;
+      if (value <= 0) {
+        clearInterval(interval);
+      } else {
+        let newValue = Math.round(value - 0.1 * value - 1);
+        console.log(newValue);
+        this.setState({ rangeValue: newValue });
+      }
+    }, 10);
   };
 
   handleCancelSaving = index => {
@@ -40,6 +59,15 @@ class App extends Component {
     savings.splice(index, 1);
     console.log(savings);
     this.setState({ savings });
+  };
+
+  handlePopupTrigger = () => {
+    let popup = document.getElementById("popup").style;
+    if (popup.bottom === "0vh" || "") {
+      popup.bottom = "-50vh";
+    } else {
+      popup.bottom = "0vh";
+    }
   };
 
   render() {
@@ -85,9 +113,18 @@ class App extends Component {
           >
             <option value="">Choose target</option>
             {this.state.targets.map((t, index) => (
-              <option value={index}>{t.name}</option>
+              <option key={index} value={index}>
+                {t.name}
+              </option>
             ))}
           </select>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => this.handlePopupTrigger()}
+          >
+            popup
+          </button>
           <div className="CancelTimer" id="cancelTimer">
             <button className="cancelButton" onClick={handleCancelTimer}>
               Cancel
@@ -100,46 +137,47 @@ class App extends Component {
           <div className="app-footer">
             <div className="slider-container">
               <ReactSlider
-                min={1}
-                max={this.state.selectedTarget.price / 10}
-                defaultValue={1}
+                min={0}
+                max={this.state.selectedTarget.price}
+                value={this.state.rangeValue}
                 className="vertical-slider"
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
                 orientation="vertical"
-                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                renderThumb={(props, state) => (
+                  <div {...props}>{Math.round(state.valueNow / 10)}</div>
+                )}
+                onChange={e => this.setState({ rangeValue: e })}
                 onAfterChange={value =>
                   this.handleNewSaving(this.state.selectedTarget.name, value)
                 }
               />
             </div>
-            {this.state.savings.length === 0 ? null : (
-              <div
-              // className="SavingsList"
-              >
-                <h3>Savings:</h3>
-                {this.state.savings.reverse().map((s, index) => (
-                  <div>
-                    <span>
-                      {s.target} + {s.amount}€
-                    </span>
-                    <button
-                      value={index}
-                      onClick={e => this.handleCancelSaving(e.target.value)}
-                    >
-                      cancel
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         )}
+        <div id="popup" className="container bg-warning mx-auto rounded-top">
+          {this.state.savings.length === 0 ? null : (
+            <div>
+              <h3>Savings:</h3>
+              {this.state.savings.map((s, index) => (
+                <div key={index}>
+                  <span>
+                    {s.target} + {s.amount}€
+                  </span>
+                  <button
+                    value={index}
+                    onClick={e => this.handleCancelSaving(e.target.value)}
+                  >
+                    cancel
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
 }
 
 export default App;
-
-//<h1>{this.state.rangeValue}€</h1>

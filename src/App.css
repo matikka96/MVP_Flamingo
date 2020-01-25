@@ -1,8 +1,13 @@
 .App {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
   text-align: center;
-  height: 100vh;
+  height: 80vh;
+  width: 100vw;
   background-color: steelblue;
 }
 
@@ -60,6 +65,7 @@
 }
 .vertical-slider {
   height: 100%;
+  transition-duration: 1s;
 }
 
 .slider-container {
@@ -69,9 +75,17 @@
   margin: 0 auto;
 }
 .app-header {
-  height: 50vh;
+  height: 50%;
 }
 .app-footer {
+  height: 50%;
+}
+#popup {
+  bottom: -50vh;
+  position: fixed;
+  transition-duration: 0.3s;
   height: 50vh;
-  /* background-color: cyan; */
+  z-index: 100;
+  left: 50%;
+  transform: translateX(-50%);
 }
