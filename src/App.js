@@ -31,11 +31,11 @@ class App extends Component {
     }
   }
 
-  // componentDidMount() {
-  //   document.body.ontouchmove = e => {
-  //     e.preventDefault();
-  //   };
-  // }
+  componentDidMount() {
+    document.body.ontouchmove = e => {
+      e.preventDefault();
+    };
+  }
 
   handleNewSaving = (target, amount) => {
     this.setState({
