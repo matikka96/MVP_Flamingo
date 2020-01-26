@@ -31,11 +31,11 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    document.body.ontouchmove = e => {
-      e.preventDefault();
-    };
-  }
+  // componentDidMount() {
+  //   document.body.ontouchmove = e => {
+  //     e.preventDefault();
+  //   };
+  // }
 
   handleNewSaving = (target, amount) => {
     this.setState({
@@ -118,24 +118,18 @@ class App extends Component {
               </option>
             ))}
           </select>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => this.handlePopupTrigger()}
-          >
-            popup
-          </button>
+
           <div className="CancelTimer" id="cancelTimer">
             <button className="cancelButton" onClick={handleCancelTimer}>
               Cancel
             </button>
           </div>
         </div>
-        {this.state.selectedTarget === "" ? (
-          <p className="greetingMessage">Please select target</p>
-        ) : (
-          <div className="app-footer">
-            <div className="slider-container">
+        <div className="app-footer d-flex flex-column justify-content-between align-items-center p-3">
+          {this.state.selectedTarget === "" ? (
+            <p className="greetingMessage">Please select target</p>
+          ) : (
+            <div className="slider-container mb-3">
               <ReactSlider
                 min={0}
                 max={this.state.selectedTarget.price}
@@ -153,25 +147,45 @@ class App extends Component {
                 }
               />
             </div>
+          )}
+          <button
+            className="btn btn-light d-block"
+            onClick={() => this.handlePopupTrigger()}
+          >
+            Show savings
+          </button>
+        </div>
+        <div
+          id="popup"
+          className="container bg-warning mx-auto rounded-top overflow-auto"
+        >
+          <div className="d-flex justify-content-between py-3 m-0 sticky-top bg-warning">
+            <h3>Savings</h3>
+            <button
+              className="btn btn-secondary"
+              onClick={() => this.handlePopupTrigger()}
+            >
+              Close
+            </button>
           </div>
-        )}
-        <div id="popup" className="container bg-warning mx-auto rounded-top">
           {this.state.savings.length === 0 ? null : (
-            <div>
-              <h3>Savings:</h3>
-              {this.state.savings.map((s, index) => (
-                <div key={index}>
-                  <span>
-                    {s.target} + {s.amount}€
-                  </span>
-                  <button
-                    value={index}
-                    onClick={e => this.handleCancelSaving(e.target.value)}
-                  >
-                    cancel
-                  </button>
-                </div>
-              ))}
+            <div className="">
+              <table className="table table-borderless table-striped text-left">
+                <thead>
+                  <tr>
+                    <th scope="Target">Taget</th>
+                    <th scope="Faving">Saving amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.savings.map((s, index) => (
+                    <tr key={index}>
+                      <td>{s.target}</td>
+                      <td>{s.amount}€</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
