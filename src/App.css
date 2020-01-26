@@ -55,12 +55,13 @@ body {
 }
 .slider-thumb {
   background-color: gold;
-  width: 4rem;
-  height: 4rem;
-  top: -2rem;
-  right: -2rem;
+  width: 6rem;
+  height: 6rem;
+  top: -3rem;
+  right: -3rem;
   border-radius: 50%;
-  line-height: 4rem;
+  line-height: 6rem;
+  /* border: 3px solid black; */
 }
 .slider-track {
   background-color: black;
@@ -72,14 +73,28 @@ body {
 }
 
 .slider-container {
-  background-color: black;
-  width: 1px;
-  /* height: 100%; */
-  flex-grow: 1;
+  /* background-color: black;
+  width: 1px; */
+  height: 100%;
+  /* flex-grow: 1; */
   margin: 0 auto;
+  position: relative;
+  top: -3rem;
 }
+
+.central-circle {
+  height: 8rem;
+  width: 8rem;
+  background-color: white;
+  position: absolute;
+  border-radius: 50%;
+  left: -4rem;
+  top: -1rem;
+}
+
 .app-header {
   height: 50%;
+  background-color: white;
 }
 .app-footer {
   height: 50%;

@@ -31,12 +31,6 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    document.body.ontouchmove = e => {
-      e.preventDefault();
-    };
-  }
-
   handleNewSaving = (target, amount) => {
     this.setState({
       savings: [...this.state.savings, { target, amount: amount / 10 }]
@@ -48,7 +42,7 @@ class App extends Component {
         clearInterval(interval);
       } else {
         let newValue = Math.round(value - 0.1 * value - 1);
-        console.log(newValue);
+        // console.log(newValue);
         this.setState({ rangeValue: newValue });
       }
     }, 10);
@@ -119,17 +113,22 @@ class App extends Component {
             ))}
           </select>
 
+          <button className="btn btn-secondary" onClick={() => this.handlePopupTrigger()}>
+            Show savings
+          </button>
+
           <div className="CancelTimer" id="cancelTimer">
             <button className="cancelButton" onClick={handleCancelTimer}>
               Cancel
             </button>
           </div>
         </div>
-        <div className="app-footer d-flex flex-column justify-content-between align-items-center p-3">
+        <div className="app-footer d-flex flex-column justify-content-between align-items-center">
           {this.state.selectedTarget === "" ? (
             <p className="greetingMessage">Please select target</p>
           ) : (
             <div className="slider-container mb-3">
+              <div className="central-circle"></div>
               <ReactSlider
                 min={0}
                 max={this.state.selectedTarget.price}
@@ -148,12 +147,6 @@ class App extends Component {
               />
             </div>
           )}
-          <button
-            className="btn btn-light d-block"
-            onClick={() => this.handlePopupTrigger()}
-          >
-            Show savings
-          </button>
         </div>
         <div
           id="popup"
