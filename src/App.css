@@ -3,12 +3,28 @@
     flex-direction: column;
     text-align: center;
     height: 100vh;
-    background-color: steelblue;
+    background: url('./JavaScript_XD/skins/petrol_fl_che_ek1.png') bottom no-repeat fixed;
+    /*background-color: #005F6A;*/
 }
 
 .greetingMessage {
     font-size: 28pt;
     color: goldenrod;
+}
+
+.ProgressBar {
+    height: 60px;
+    width: 90vw;
+    position: relative;
+}
+
+.nameDiv {
+    position: absolute;
+}
+
+.progressLabel {
+    color: white;
+    font-weight: bold;
 }
 
 .SelectTarget {
@@ -21,16 +37,20 @@
 .Slider {
     align-self: center;
     margin-top: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     flex-grow: 2;
 }
 
 .SavingsList {
+    display: flex;
+    flex-flow: column;
     align-self: center;
-    overflow-x: hidden;
+    align-items:center;
+    heigth:180px;
+    margin-top: auto;
+    /*overflow-x: hidden;
     overflow-y: auto;
-    margin-bottom: 20px;
-    height: 20em;
+    margin-bottom: 20px;*/
 }
 
 .CancelTimer {

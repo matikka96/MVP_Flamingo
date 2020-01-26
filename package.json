@@ -5,11 +5,18 @@
   "homepage": "https://tikka.dev/flamingo/hello",
   "dependencies": {
     "@material-ui/core": "^4.8.3",
+    "animateprogress": "^1.0.1",
+    "material-ui": "^1.0.0-beta.47",
     "pretty-ms": "^5.1.0",
+    "rc-slider": "^9.1.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.2.0",
-    "react-timeout": "^1.2.0"
+    "react-interval": "^2.1.1",
+    "react-native": "^0.61.5",
+    "react-native-vertical-progress": "^1.0.2",
+    "react-scripts": "^3.3.0",
+    "react-timeout": "^1.2.0",
+    "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
     "start": "react-scripts start",
