@@ -2,14 +2,6 @@ import "./App.css";
 import React, { Component } from "react";
 import ReactSlider from "react-slider";
 import "bootstrap/dist/css/bootstrap.css";
-// import Slider from "@material-ui/core/Slider";
-// import Slider, { createSliderWithTooltip } from "rc-slider";
-// import ReactSlider from "rc-slider";
-// import Tooltip from "rc-tooltip";
-// import "rc-slider/assets/index.css";
-// import "rc-tooltip/assets/bootstrap.css";
-// import ReactTimeout from 'react-timeout';
-// import Timer from "./Timer";
 
 class App extends Component {
   state = {
@@ -21,7 +13,8 @@ class App extends Component {
     ],
     selectedTarget: "",
     savings: [],
-    on: false
+    on: false,
+    selectedPopup: "popup-target"
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -55,80 +48,52 @@ class App extends Component {
     this.setState({ savings });
   };
 
-  handlePopupTrigger = () => {
-    let popup = document.getElementById("popup").style;
-    if (popup.bottom === "0vh" || "") {
-      popup.bottom = "-50vh";
+  handleSavingsPopup = () => {
+    let popup = this.state.selectedPopup;
+    if (popup === "popup-savings") {
+      this.setState({ selectedPopup: "" });
     } else {
-      popup.bottom = "0vh";
+      this.setState({ selectedPopup: "popup-savings" });
+    }
+
+    // let popup = document.getElementById("popup").style;
+    // if (popup.bottom === "0vh" || "") {
+    //   popup.bottom = "-50vh";
+    // } else {
+    //   popup.bottom = "0vh";
+    // }
+  };
+
+  handleTargetPopup = () => {
+    let popup = this.state.selectedPopup;
+    if (popup === "popup-target") {
+      this.setState({ selectedPopup: "" });
+    } else {
+      this.setState({ selectedPopup: "popup-target" });
     }
   };
 
   render() {
-    // const handleChange = (event, newValue) => {
-    //   this.setState({ rangeValue: newValue });
-    // };
-
-    // const handleChangeCommit = (event, newValue) => {
-    //   document.getElementById("TransactionSlider").style.display = "none";
-    //   document.getElementById("cancelTimer").style.display = "flex";
-
-    //   this.timer = setTimeout(() => {
-    //     this.setState({ on: !this.state.on });
-    //     this.handleNewSaving(this.state.selectedTarget.name, this.state.rangeValue);
-    //     document.getElementById("TransactionSlider").style.display = "flex";
-    //     document.getElementById("cancelTimer").style.display = "none";
-    //   }, 3000);
-    // };
-
-    const handleCancelTimer = () => {
-      this.setState({ on: false });
-      clearTimeout(this.timer);
-      document.getElementById("cancelTimer").style.display = "none";
-      document.getElementById("TransactionSlider").style.display = "flex";
-    };
-
-    // let sliderSytle = {
-    //     cursor: "pointer",
-    //     color: "#daa520"
-    // }
-
     return (
       <div className="App">
         <div className="app-header">
-          <select
-            className="SelectTarget"
-            id="input-target"
-            placeholder="Select target"
-            value={this.state.targets.indexOf(this.state.selectedTarget)}
-            onChange={e =>
-              this.setState({ selectedTarget: this.state.targets[e.target.value] })
-            }
-          >
-            <option value="">Choose target</option>
-            {this.state.targets.map((t, index) => (
-              <option key={index} value={index}>
-                {t.name}
-              </option>
-            ))}
-          </select>
-
-          <button className="btn btn-secondary" onClick={() => this.handlePopupTrigger()}>
+          <button className="btn btn-secondary" onClick={() => this.handleSavingsPopup()}>
             Show savings
           </button>
-
-          <div className="CancelTimer" id="cancelTimer">
-            <button className="cancelButton" onClick={handleCancelTimer}>
-              Cancel
-            </button>
-          </div>
+          <button className="btn btn-secondary" onClick={e => this.handleTargetPopup()}>
+            Select target
+          </button>
+          {this.state.selectedTarget !== "" ? null : (
+            <h1 className="text-dark">Please select target</h1>
+          )}
+          {/* <div className="mx-auto">
+            <p>asd</p>
+          </div> */}
         </div>
         <div className="app-footer d-flex flex-column justify-content-between align-items-center">
-          {this.state.selectedTarget === "" ? (
-            <p className="greetingMessage">Please select target</p>
-          ) : (
-            <div className="slider-container mb-3">
-              <div className="central-circle"></div>
+          <div className="slider-container mb-3">
+            <div className="central-circle"></div>
+            {this.state.selectedTarget === "" ? null : (
               <ReactSlider
                 min={0}
                 max={this.state.selectedTarget.price}
@@ -138,49 +103,79 @@ class App extends Component {
                 trackClassName="slider-track"
                 orientation="vertical"
                 renderThumb={(props, state) => (
-                  <div {...props}>{Math.round(state.valueNow / 10)}</div>
+                  <h3 {...props}>{Math.round(state.valueNow / 10)}</h3>
                 )}
                 onChange={e => this.setState({ rangeValue: e })}
                 onAfterChange={value =>
                   this.handleNewSaving(this.state.selectedTarget.name, value)
                 }
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div
           id="popup"
           className="container bg-warning mx-auto rounded-top overflow-auto"
+          style={
+            this.state.selectedPopup === "popup-savings"
+              ? { bottom: "0vh" }
+              : { bottom: "-60vh" }
+          }
         >
           <div className="d-flex justify-content-between py-3 m-0 sticky-top bg-warning">
             <h3>Savings</h3>
             <button
               className="btn btn-secondary"
-              onClick={() => this.handlePopupTrigger()}
+              onClick={() => this.handleSavingsPopup()}
             >
               Close
             </button>
           </div>
           {this.state.savings.length === 0 ? null : (
-            <div className="">
-              <table className="table table-borderless table-striped text-left">
-                <thead>
-                  <tr>
-                    <th scope="Target">Taget</th>
-                    <th scope="Faving">Saving amount</th>
+            <table className="table table-borderless table-striped text-left">
+              <thead>
+                <tr>
+                  <th scope="Target">Taget</th>
+                  <th scope="Faving">Saving amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.savings.map((s, index) => (
+                  <tr key={index}>
+                    <td>{s.target}</td>
+                    <td>{s.amount}€</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {this.state.savings.map((s, index) => (
-                    <tr key={index}>
-                      <td>{s.target}</td>
-                      <td>{s.amount}€</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           )}
+        </div>
+        <div
+          id="category-selector"
+          className="container d-flex flex-column p-0 rounded-top"
+          style={
+            this.state.selectedPopup === "popup-target"
+              ? { height: "40vh" }
+              : { height: "0vh" }
+          }
+        >
+          {this.state.targets.map((t, index) => (
+            <button
+              key={index}
+              value={index}
+              className={
+                this.state.selectedTarget === t
+                  ? "target btn btn-danger rounded-0 active"
+                  : "target btn btn-danger rounded-0"
+              }
+              onClick={e => {
+                this.setState({ selectedTarget: this.state.targets[e.target.value] });
+                this.handleTargetPopup();
+              }}
+            >
+              {t.name}
+            </button>
+          ))}
         </div>
       </div>
     );

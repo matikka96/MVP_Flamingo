@@ -100,11 +100,26 @@ body {
   height: 50%;
 }
 #popup {
-  bottom: -50vh;
+  bottom: -60vh;
   position: fixed;
   transition-duration: 0.3s;
-  height: 50vh;
+  height: 60vh;
   z-index: 100;
   left: 50%;
   transform: translateX(-50%);
+}
+
+#category-selector {
+  bottom: 0vh;
+  position: fixed;
+  transition-duration: 0.3s;
+  height: 40vh;
+  z-index: 100;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.target {
+  flex-grow: 1;
+  height: 300px;
 }
