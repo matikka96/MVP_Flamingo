@@ -106,17 +106,24 @@ body {
   height: 300px;
 }
 
-.CancelTimer {
-  display: none;
-  align-self: center;
+.CancelContainer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-top: 10%;
 }
 
 .cancelButton {
-  margin-top: 30px;
-  font-size: 24pt;
-  background-color: steelblue;
-  border-color: steelblue;
-  border-style: hidden;
+    position: relative;
+    font-size: 24pt;
+    background-color: white;
+    border-style: hidden;
+}
+
+.CancelTimer {
+  display: none;
+  align-self: center;
+  position: absolute;
 }
 
 .SavingsList {

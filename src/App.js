@@ -51,6 +51,7 @@ class App extends Component {
                this.setState({on: !this.state.on});
                document.getElementById("cancelTimer").style.display = 'none';
                clearInterval(this.circleTimer);
+               document.getElementById('progressContainer').style.opacity = 1;
                this.setState({ valueCircleTimer: 0});
                this.setState({
                  savings: [...this.state.savings, { target, amount: amount / 10 }]
@@ -82,10 +83,12 @@ class App extends Component {
                        savingsMercedes : prevState.savingsMercedes + (amount*0.1)
                    }));
                }
+               /*
                console.log(amount);
                console.log(this.state.savingsHoodie);
                console.log(this.state.savingsPlaystation);
                console.log(this.state.savingsMercedes);
+               */
            },3000);
       }
   };
@@ -96,6 +99,7 @@ class App extends Component {
         clearInterval(this.circleTimer);
         this.setState({ valueCircleTimer: 0});
         document.getElementById("cancelTimer").style.display = 'none';
+        document.getElementById('progressContainer').style.opacity = 1;
     };
 
   handleCancelSaving = index => {
@@ -125,6 +129,7 @@ class App extends Component {
                     
   handleProgressBarClick = (id) => e => {
       this.setState({ selectedTarget: this.state.targets[id] });
+      document.getElementById('progressContainer').style.opacity = 0.45;
   }
 
   render() {
@@ -152,11 +157,13 @@ class App extends Component {
           {this.state.selectedTarget !== "" ? null : (
             <h1 className="text-dark">Please select target</h1>
           )}
-          <div className="CancelTimer" id="cancelTimer">
-              <button className="cancelButton" onClick={this.handleCancelTimer}><img style={{height:100, width:100}} src={cancel}/></button>
-          </div>
-          <div className="circularProgressBar">
-              <CircularProgress variant="determinate" color="secondary" value={this.state.valueCircleTimer} />
+          <div className="CancelContainer">
+              <div className="CancelTimer" id="cancelTimer">
+                  <button className="cancelButton" onClick={this.handleCancelTimer}><img style={{height:100, width:100}} src={cancel}/></button>
+              </div>
+              <div className="circularProgressBar">
+            <CircularProgress variant="determinate" color="secondary" size={100} value={this.state.valueCircleTimer} />
+              </div>
           </div>
         </div>
         <div className="app-footer d-flex flex-column justify-content-between align-items-center">
@@ -181,7 +188,7 @@ class App extends Component {
               />
             )}
           </div>
-          <div className="SavingsList">
+          <div className="SavingsList" id="progressContainer">
                 <div className="ProgressBar" onClick={this.handleProgressBarClick(0)}>
                 <BorderLinearProgress
                     variant="determinate"
