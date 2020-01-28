@@ -189,6 +189,9 @@ class App extends Component {
                     value={this.state.savingsHoodie * 100 / 30}
                 />
                 </div>
+                <div className="nameDiv" style={{marginTop: 23}}>
+                    <p className="progressLabel">Hoodie</p>
+                </div>
                 <div className="ProgressBar" onClick={this.handleProgressBarClick(1)}>
                 <BorderLinearProgress
                     variant="determinate"
@@ -196,12 +199,18 @@ class App extends Component {
                     value={this.state.savingsPlaystation * 100 / 300}
                 />
                 </div>
+                <div className="nameDiv" style={{marginTop: 103}}>
+                    <p className="progressLabel">Playstation</p>
+                </div>
                 <div className="ProgressBar" onClick={this.handleProgressBarClick(2)}>
                 <BorderLinearProgress
                     variant="determinate"
                     color="secondary"
                     value={this.state.savingsMercedes * 100 / 30000}
                 />
+                </div>
+                <div className="nameDiv" style={{marginTop: 183}}>
+                    <p className="progressLabel">Mercedes</p>
                 </div>
           </div>
         </div>

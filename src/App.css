@@ -125,9 +125,11 @@ body {
     position: absolute;
     height: 40vh;
     bottom: 0vh;
+    align-items: center;
 }
 
 .ProgressBar {
+    position: relative;
     height: 10vh;
     width: 90vw;
     margin-top: 2vh;
