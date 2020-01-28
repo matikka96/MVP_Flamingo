@@ -2,19 +2,31 @@ import "./App.css";
 import React, { Component } from "react";
 import ReactSlider from "react-slider";
 import "bootstrap/dist/css/bootstrap.css";
+import { withStyles } from '@material-ui/core/styles';
+import ReactTimeout from 'react-timeout';
+import ReactInterval from 'react-interval';
+import cancel from './JavaScript_XD/skins/ocs_cancel.png';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 
 class App extends Component {
   state = {
     rangeValue: 0,
     targets: [
-      { name: "hoodie", price: 30 },
-      { name: "playstation", price: 300 },
-      { name: "mercedes", price: 30000 }
+      { name: "hoodie", price: 30, total: 0, id: 0 },
+      { name: "playstation", price: 300, total: 0, id: 1 },
+      { name: "mercedes", price: 30000, total: 0, id: 2 }
     ],
     selectedTarget: "",
+    savingsHoodie: 0,
+    savingsPlaystation: 0,
+    savingsMercedes: 0,
+    valueCircleTimer: 0,
     savings: [],
     on: false,
-    selectedPopup: "popup-target"
+    selectedPopup: ""
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -25,21 +37,66 @@ class App extends Component {
   }
 
   handleNewSaving = (target, amount) => {
-    this.setState({
-      savings: [...this.state.savings, { target, amount: amount / 10 }]
-    });
-    let value = this.state.rangeValue;
-    var interval = setInterval(() => {
-      value = this.state.rangeValue;
-      if (value <= 0) {
-        clearInterval(interval);
-      } else {
-        let newValue = Math.round(value - 0.1 * value - 1);
-        // console.log(newValue);
-        this.setState({ rangeValue: newValue });
+      
+      if (amount !== 0) {
+          document.getElementById("cancelTimer").style.display = 'flex';
+                  
+          this.circleTimer = setInterval(() => {
+                  this.setState((prevState,props) => ({
+                      valueCircleTimer : prevState.valueCircleTimer + 0.33
+                  }));
+          },10);
+             
+          this.timer = setTimeout(() => {
+               this.setState({on: !this.state.on});
+               document.getElementById("cancelTimer").style.display = 'none';
+               clearInterval(this.circleTimer);
+               this.setState({ valueCircleTimer: 0});
+               this.setState({
+                 savings: [...this.state.savings, { target, amount: amount / 10 }]
+               });
+               let value = this.state.rangeValue;
+               var interval = setInterval(() => {
+                 value = this.state.rangeValue;
+                 if (value <= 0) {
+                   clearInterval(interval);
+                 } else {
+                   let newValue = Math.round(value - 0.1 * value - 1);
+                   // console.log(newValue);
+                   this.setState({ rangeValue: newValue });
+                 }
+               }, 10);
+                      
+               if(target === "playstation") {
+                   this.setState((prevState,props) => ({
+                       savingsPlaystation : prevState.savingsPlaystation + (amount*0.1)
+                   }));
+               }
+               if(target === "hoodie") {
+                   this.setState((prevState,props) => ({
+                       savingsHoodie : prevState.savingsHoodie + (amount*0.1)
+                   }));
+               }
+               if(target === "mercedes") {
+                   this.setState((prevState,props) => ({
+                       savingsMercedes : prevState.savingsMercedes + (amount*0.1)
+                   }));
+               }
+               console.log(amount);
+               console.log(this.state.savingsHoodie);
+               console.log(this.state.savingsPlaystation);
+               console.log(this.state.savingsMercedes);
+           },3000);
       }
-    }, 10);
   };
+                    
+    handleCancelTimer = () => {
+        this.setState({ on: !this.state.on} );
+        clearTimeout(this.timer);
+        clearInterval(this.circleTimer);
+        this.setState({ valueCircleTimer: 0});
+        document.getElementById("cancelTimer").style.display = 'none';
+    };
 
   handleCancelSaving = index => {
     let savings = [...this.state.savings];
@@ -55,13 +112,6 @@ class App extends Component {
     } else {
       this.setState({ selectedPopup: "popup-savings" });
     }
-
-    // let popup = document.getElementById("popup").style;
-    // if (popup.bottom === "0vh" || "") {
-    //   popup.bottom = "-50vh";
-    // } else {
-    //   popup.bottom = "0vh";
-    // }
   };
 
   handleTargetPopup = () => {
@@ -72,23 +122,42 @@ class App extends Component {
       this.setState({ selectedPopup: "popup-target" });
     }
   };
+                    
+  handleProgressBarClick = (id) => e => {
+      this.setState({ selectedTarget: this.state.targets[id] });
+  }
 
   render() {
+                
+    const BorderLinearProgress = withStyles({
+         root: {
+           height: 45,
+           borderRadius: 90,
+           backgroundColor: '#004F4F',
+           label: 'Hoodie',
+         },
+         bar: {
+           borderRadius: 90,
+           backgroundColor: '#DAA520',
+           
+         },
+    })(LinearProgress);
+                
     return (
       <div className="App">
         <div className="app-header">
           <button className="btn btn-secondary" onClick={() => this.handleSavingsPopup()}>
             Show savings
           </button>
-          <button className="btn btn-secondary" onClick={e => this.handleTargetPopup()}>
-            Select target
-          </button>
           {this.state.selectedTarget !== "" ? null : (
             <h1 className="text-dark">Please select target</h1>
           )}
-          {/* <div className="mx-auto">
-            <p>asd</p>
-          </div> */}
+          <div className="CancelTimer" id="cancelTimer">
+              <button className="cancelButton" onClick={this.handleCancelTimer}><img style={{height:100, width:100}} src={cancel}/></button>
+          </div>
+          <div className="circularProgressBar">
+              <CircularProgress variant="determinate" color="secondary" value={this.state.valueCircleTimer} />
+          </div>
         </div>
         <div className="app-footer d-flex flex-column justify-content-between align-items-center">
           <div className="slider-container mb-3">
@@ -111,6 +180,29 @@ class App extends Component {
                 }
               />
             )}
+          </div>
+          <div className="SavingsList">
+                <div className="ProgressBar" onClick={this.handleProgressBarClick(0)}>
+                <BorderLinearProgress
+                    variant="determinate"
+                    color="secondary"
+                    value={this.state.savingsHoodie * 100 / 30}
+                />
+                </div>
+                <div className="ProgressBar" onClick={this.handleProgressBarClick(1)}>
+                <BorderLinearProgress
+                    variant="determinate"
+                    color="secondary"
+                    value={this.state.savingsPlaystation * 100 / 300}
+                />
+                </div>
+                <div className="ProgressBar" onClick={this.handleProgressBarClick(2)}>
+                <BorderLinearProgress
+                    variant="determinate"
+                    color="secondary"
+                    value={this.state.savingsMercedes * 100 / 30000}
+                />
+                </div>
           </div>
         </div>
         <div
@@ -150,36 +242,10 @@ class App extends Component {
             </table>
           )}
         </div>
-        <div
-          id="category-selector"
-          className="container d-flex flex-column p-0 rounded-top"
-          style={
-            this.state.selectedPopup === "popup-target"
-              ? { height: "40vh" }
-              : { height: "0vh" }
-          }
-        >
-          {this.state.targets.map((t, index) => (
-            <button
-              key={index}
-              value={index}
-              className={
-                this.state.selectedTarget === t
-                  ? "target btn btn-danger rounded-0 active"
-                  : "target btn btn-danger rounded-0"
-              }
-              onClick={e => {
-                this.setState({ selectedTarget: this.state.targets[e.target.value] });
-                this.handleTargetPopup();
-              }}
-            >
-              {t.name}
-            </button>
-          ))}
-        </div>
       </div>
     );
   }
 }
 
 export default App;
+            
