@@ -2,22 +2,20 @@ import "./App.css";
 import React, { Component } from "react";
 import ReactSlider from "react-slider";
 import "bootstrap/dist/css/bootstrap.css";
-import { withStyles } from '@material-ui/core/styles';
-import ReactTimeout from 'react-timeout';
-import ReactInterval from 'react-interval';
-import cancel from './JavaScript_XD/skins/ocs_cancel.png';
+import { withStyles } from "@material-ui/core/styles";
+import ReactTimeout from "react-timeout";
+import ReactInterval from "react-interval";
+import cancel from "./JavaScript_XD/skins/ocs_cancel.png";
 //import CheckIcon from '@material-ui/icons/Check';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
+import LinearProgress from "@material-ui/core/LinearProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class App extends Component {
-    
-    constructor(props) {
-        super(props);
-        this.timer = null;
-        this.circleTimer = null;
-    }
+  constructor(props) {
+    super(props);
+    this.timer = null;
+    this.circleTimer = null;
+  }
   state = {
     rangeValue: 0,
     targets: [
@@ -32,7 +30,7 @@ class App extends Component {
     valueCircleTimer: 0,
     savings: [],
     selectedPopup: "",
-    timerOn: false,
+    timerOn: false
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,90 +39,87 @@ class App extends Component {
       this.setState({ rangeValue: 0 });
     }
   }
-    
+
   handleCancelTimer = () => {
-      this.stopInterval();
-      clearTimeout(this.timer);
-      let value = this.state.rangeValue;
-      var interval = setInterval(() => {
-        value = this.state.rangeValue;
-        if (value <= 0) {
-          clearInterval(interval);
-        } else {
-          let newValue = Math.round(value - 0.1 * value - 1);
-          // console.log(newValue);
-          this.setState({ rangeValue: newValue });
+    this.stopInterval();
+    clearTimeout(this.timer);
+    let value = this.state.rangeValue;
+    var interval = setInterval(() => {
+      value = this.state.rangeValue;
+      if (value <= 0) {
+        clearInterval(interval);
+      } else {
+        let newValue = Math.round(value - 0.1 * value - 1);
+        // console.log(newValue);
+        this.setState({ rangeValue: newValue });
+      }
+    }, 10);
+    document.getElementById("cancelTimer").style.display = "none";
+    document.getElementById("progressContainer").style.opacity = 1;
+    this.setState({ timerOn: false });
+  };
+
+  startInterval = () => {
+    this.circleTimer = setInterval(() => {
+      this.setState((prevState, props) => ({
+        valueCircleTimer: prevState.valueCircleTimer + 0.35
+      }));
+    }, 10);
+  };
+
+  stopInterval = () => {
+    clearInterval(this.circleTimer);
+    this.setState({ valueCircleTimer: 0 });
+  };
+
+  handleNewSaving = (target, amount) => {
+    if (amount !== 0 && this.state.timerOn === false) {
+      document.getElementById("cancelTimer").style.display = "flex";
+      this.startInterval();
+
+      this.setState({ timerOn: true });
+      this.timer = setTimeout(() => {
+        this.setState({ timerOn: false });
+        document.getElementById("cancelTimer").style.display = "none";
+        document.getElementById("progressContainer").style.opacity = 1;
+        if (amount !== 0) {
+          this.setState({
+            savings: [...this.state.savings, { target, amount: amount / 10 }]
+          });
         }
-      }, 10);
-      document.getElementById("cancelTimer").style.display = 'none';
-      document.getElementById("progressContainer").style.opacity = 1;
-      this.setState({timerOn: false});
-  };
-    
-    startInterval = () => {
-        this.circleTimer = setInterval(() => {
-                this.setState((prevState,props) => ({
-                    valueCircleTimer : prevState.valueCircleTimer +0.35
-                }));
-        },10);
-    }
-    
-    stopInterval = () => {
-        clearInterval(this.circleTimer);
-        this.setState({ valueCircleTimer: 0});
-    }
-    
-    handleNewSaving = (target, amount) => {
-      
-      if(amount !== 0 && this.state.timerOn === false)
-      {
-          document.getElementById("cancelTimer").style.display = 'flex';
-          this.startInterval();
-          
-          this.setState({timerOn: true});
-          this.timer = setTimeout(() => {
-            this.setState({timerOn: false});
-            document.getElementById("cancelTimer").style.display = 'none';
-            document.getElementById("progressContainer").style.opacity = 1;
-            if(amount !== 0) {
-                this.setState({
-                  savings: [...this.state.savings, { target, amount: amount / 10 }]
-                });
-            }
-            
-           this.stopInterval();
-                       
-           let value = this.state.rangeValue;
-           var interval = setInterval(() => {
-             value = this.state.rangeValue;
-             if (value <= 0) {
-               clearInterval(interval);
-             } else {
-               let newValue = Math.round(value - 0.1 * value - 1);
-               // console.log(newValue);
-               this.setState({ rangeValue: newValue });
-             }
-           }, 10);
-                       
-           if(target === "playstation") {
-               this.setState((prevState,props) => ({
-                   savingsPlaystation : prevState.savingsPlaystation + (amount*0.1)
-               }));
-           }
-           if(target === "hoodie") {
-               this.setState((prevState,props) => ({
-                   savingsHoodie : prevState.savingsHoodie + (amount*0.1)
-               }));
-           }
-           if(target === "mercedes") {
-               this.setState((prevState,props) => ({
-                   savingsMercedes : prevState.savingsMercedes + (amount*0.1)
-               }));
-           }
-        },3000);
+
+        this.stopInterval();
+
+        let value = this.state.rangeValue;
+        var interval = setInterval(() => {
+          value = this.state.rangeValue;
+          if (value <= 0) {
+            clearInterval(interval);
+          } else {
+            let newValue = Math.round(value - 0.1 * value - 1);
+            // console.log(newValue);
+            this.setState({ rangeValue: newValue });
+          }
+        }, 10);
+
+        if (target === "playstation") {
+          this.setState((prevState, props) => ({
+            savingsPlaystation: prevState.savingsPlaystation + amount * 0.1
+          }));
+        }
+        if (target === "hoodie") {
+          this.setState((prevState, props) => ({
+            savingsHoodie: prevState.savingsHoodie + amount * 0.1
+          }));
+        }
+        if (target === "mercedes") {
+          this.setState((prevState, props) => ({
+            savingsMercedes: prevState.savingsMercedes + amount * 0.1
+          }));
+        }
+      }, 3000);
     }
   };
-                    
 
   handleCancelSaving = index => {
     let savings = [...this.state.savings];
@@ -141,44 +136,52 @@ class App extends Component {
       this.setState({ selectedPopup: "popup-savings" });
     }
   };
-                    
-  handleProgressBarClick = (id) => e => {
-      this.setState({ selectedTarget: this.state.targets[id] });
-      document.getElementById('progressContainer').style.opacity = 0.45;
-  }
+
+  handleProgressBarClick = id => e => {
+    this.setState({ selectedTarget: this.state.targets[id] });
+    document.getElementById("progressContainer").style.opacity = 0.45;
+  };
 
   render() {
-                
     const BorderLinearProgress = withStyles({
-         root: {
-           height: 45,
-           borderRadius: 90,
-           backgroundColor: '#004F4F',
-           label: 'Hoodie',
-         },
-         bar: {
-           borderRadius: 90,
-           backgroundColor: '#DAA520',
-           
-         },
+      root: {
+        height: 45,
+        borderRadius: 90,
+        backgroundColor: "#004F4F",
+        label: "Hoodie"
+      },
+      bar: {
+        borderRadius: 90,
+        backgroundColor: "#DAA520"
+      }
     })(LinearProgress);
-                           
+
     return (
       <div className="App">
         <div className="app-header">
-          <button className="btn btn-secondary" onClick={() => this.handleSavingsPopup()}>
+          <button
+            className="btn btn-outline-dark my-3"
+            onClick={() => this.handleSavingsPopup()}
+          >
             Show savings
           </button>
           {this.state.selectedTarget !== "" ? null : (
             <h1 className="text-dark">Please select target</h1>
           )}
           <div className="CancelContainer" onClick={this.handleCancelTimer}>
-              <div className="CancelTimer" id="cancelTimer">
-                <button className="cancelButton"><img style={{height:100, width:100}} src={cancel}/></button>
-              </div>
-              <div className="circularProgressBar">
-                <CircularProgress variant="determinate" color="secondary" size={100} value={this.state.valueCircleTimer} />
-              </div>
+            <div className="CancelTimer" id="cancelTimer">
+              <button className="cancelButton">
+                <img style={{ height: 100, width: 100 }} src={cancel} />
+              </button>
+            </div>
+            <div className="circularProgressBar">
+              <CircularProgress
+                variant="determinate"
+                color="secondary"
+                size={100}
+                value={this.state.valueCircleTimer}
+              />
+            </div>
           </div>
         </div>
         <div className="app-footer d-flex flex-column justify-content-between align-items-center">
@@ -196,7 +199,10 @@ class App extends Component {
                 renderThumb={(props, state) => (
                   <h3 {...props}>{Math.round(state.valueNow / 10)}</h3>
                 )}
-                onChange={e => {this.setState({ rangeValue: e });document.getElementById('progressContainer').style.opacity = 0.45;}}
+                onChange={e => {
+                  this.setState({ rangeValue: e });
+                  document.getElementById("progressContainer").style.opacity = 0.45;
+                }}
                 onAfterChange={value =>
                   this.handleNewSaving(this.state.selectedTarget.name, value)
                 }
@@ -204,36 +210,63 @@ class App extends Component {
             )}
           </div>
           <div className="SavingsList" id="progressContainer">
-                <div className="ProgressBar" onClick={this.handleProgressBarClick(0)}>
-                <BorderLinearProgress
-                    variant="determinate"
-                    color="secondary"
-                    value={this.state.savingsHoodie * 100 / 30}
-                />
-                </div>
-                <div className="nameDiv_frst" onClick={this.handleProgressBarClick(0)}>
-                    <p className="progressLabel">Hoodie</p>
-                </div>
-                <div className="ProgressBar" onClick={this.handleProgressBarClick(1)}>
-                <BorderLinearProgress
-                    variant="determinate"
-                    color="secondary"
-                    value={this.state.savingsPlaystation * 100 / 300}
-                />
-                </div>
-                <div className="nameDiv_sec" onClick={this.handleProgressBarClick(1)}>
-                    <p className="progressLabel">Playstation</p>
-                </div>
-                <div className="ProgressBar" onClick={this.handleProgressBarClick(2)}>
-                <BorderLinearProgress
-                    variant="determinate"
-                    color="secondary"
-                    value={this.state.savingsMercedes * 100 / 30000}
-                />
-                </div>
-                <div className="nameDiv_thrd" onClick={this.handleProgressBarClick(2)}>
-                    <p className="progressLabel">Mercedes</p>
-                </div>
+            <div className="ProgressBar" onClick={this.handleProgressBarClick(0)}>
+              <BorderLinearProgress
+                variant="determinate"
+                color="secondary"
+                value={(this.state.savingsHoodie * 100) / 30}
+              />
+            </div>
+            <div className="nameDiv_frst" onClick={this.handleProgressBarClick(0)}>
+              <p
+                className="progressLabel"
+                style={
+                  this.state.selectedTarget.name === "hoodie"
+                    ? { fontWeight: "bold" }
+                    : { fontWeight: "normal" }
+                }
+              >
+                Hoodie
+              </p>
+            </div>
+            <div className="ProgressBar" onClick={this.handleProgressBarClick(1)}>
+              <BorderLinearProgress
+                variant="determinate"
+                color="secondary"
+                value={(this.state.savingsPlaystation * 100) / 300}
+              />
+            </div>
+            <div className="nameDiv_sec" onClick={this.handleProgressBarClick(1)}>
+              <p
+                className="progressLabel"
+                style={
+                  this.state.selectedTarget.name === "playstation"
+                    ? { fontWeight: "bold" }
+                    : { fontWeight: "normal" }
+                }
+              >
+                Playstation
+              </p>
+            </div>
+            <div className="ProgressBar" onClick={this.handleProgressBarClick(2)}>
+              <BorderLinearProgress
+                variant="determinate"
+                color="secondary"
+                value={(this.state.savingsMercedes * 100) / 30000}
+              />
+            </div>
+            <div className="nameDiv_thrd" onClick={this.handleProgressBarClick(2)}>
+              <p
+                className="progressLabel"
+                style={
+                  this.state.selectedTarget.name === "mercedes"
+                    ? { fontWeight: "bold" }
+                    : { fontWeight: "normal" }
+                }
+              >
+                Mercedes
+              </p>
+            </div>
           </div>
         </div>
         <div
@@ -279,4 +312,3 @@ class App extends Component {
 }
 
 export default App;
-            
