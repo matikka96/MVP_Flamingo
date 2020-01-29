@@ -13,6 +13,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 class App extends Component {
     
+    constructor(props) {
+        super(props);
+        this.timer = null;
+        this.circleTimer = null;
+    }
   state = {
     rangeValue: 0,
     targets: [
@@ -27,7 +32,7 @@ class App extends Component {
     valueCircleTimer: 0,
     savings: [],
     selectedPopup: "",
-    canceld: false,
+    timerOn: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -38,35 +43,56 @@ class App extends Component {
   }
     
   handleCancelTimer = () => {
+      this.stopInterval();
       clearTimeout(this.timer);
-      clearInterval(this.circleTimer);
-      this.setState({ valueCircleTimer: 0});
+      let value = this.state.rangeValue;
+      var interval = setInterval(() => {
+        value = this.state.rangeValue;
+        if (value <= 0) {
+          clearInterval(interval);
+        } else {
+          let newValue = Math.round(value - 0.1 * value - 1);
+          // console.log(newValue);
+          this.setState({ rangeValue: newValue });
+        }
+      }, 10);
       document.getElementById("cancelTimer").style.display = 'none';
       document.getElementById("progressContainer").style.opacity = 1;
+      this.setState({timerOn: false});
   };
     
-  handleNewSaving = (target, amount) => {
+    startInterval = () => {
+        this.circleTimer = setInterval(() => {
+                this.setState((prevState,props) => ({
+                    valueCircleTimer : prevState.valueCircleTimer +0.35
+                }));
+        },10);
+    }
+    
+    stopInterval = () => {
+        clearInterval(this.circleTimer);
+        this.setState({ valueCircleTimer: 0});
+    }
+    
+    handleNewSaving = (target, amount) => {
       
-      if(amount !== 0)
+      if(amount !== 0 && this.state.timerOn === false)
       {
           document.getElementById("cancelTimer").style.display = 'flex';
-          this.circleTimer = setInterval(() => {
-                  this.setState((prevState,props) => ({
-                      valueCircleTimer : prevState.valueCircleTimer +0.35
-                  }));
-          },10);
-         
-      this.timer = setTimeout(() => {
-           document.getElementById("cancelTimer").style.display = 'none';
-           document.getElementById("progressContainer").style.opacity = 1;
-              if(amount !== 0) {
-                    this.setState({
-                      savings: [...this.state.savings, { target, amount: amount / 10 }]
-                    });
-              }
-        
-           clearInterval(this.circleTimer);
-           this.setState({ valueCircleTimer: 0});
+          this.startInterval();
+          
+          this.setState({timerOn: true});
+          this.timer = setTimeout(() => {
+            this.setState({timerOn: false});
+            document.getElementById("cancelTimer").style.display = 'none';
+            document.getElementById("progressContainer").style.opacity = 1;
+            if(amount !== 0) {
+                this.setState({
+                  savings: [...this.state.savings, { target, amount: amount / 10 }]
+                });
+            }
+            
+           this.stopInterval();
                        
            let value = this.state.rangeValue;
            var interval = setInterval(() => {
@@ -95,10 +121,8 @@ class App extends Component {
                    savingsMercedes : prevState.savingsMercedes + (amount*0.1)
                }));
            }
-       },3000);
-                                }
-                       
-       //document.activeElement.blur();
+        },3000);
+    }
   };
                     
 
@@ -187,7 +211,7 @@ class App extends Component {
                     value={this.state.savingsHoodie * 100 / 30}
                 />
                 </div>
-                <div className="nameDiv_frst">
+                <div className="nameDiv_frst" onClick={this.handleProgressBarClick(0)}>
                     <p className="progressLabel">Hoodie</p>
                 </div>
                 <div className="ProgressBar" onClick={this.handleProgressBarClick(1)}>
@@ -197,7 +221,7 @@ class App extends Component {
                     value={this.state.savingsPlaystation * 100 / 300}
                 />
                 </div>
-                <div className="nameDiv_sec">
+                <div className="nameDiv_sec" onClick={this.handleProgressBarClick(1)}>
                     <p className="progressLabel">Playstation</p>
                 </div>
                 <div className="ProgressBar" onClick={this.handleProgressBarClick(2)}>
@@ -207,7 +231,7 @@ class App extends Component {
                     value={this.state.savingsMercedes * 100 / 30000}
                 />
                 </div>
-                <div className="nameDiv_thrd">
+                <div className="nameDiv_thrd" onClick={this.handleProgressBarClick(2)}>
                     <p className="progressLabel">Mercedes</p>
                 </div>
           </div>
