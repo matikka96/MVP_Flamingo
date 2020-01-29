@@ -54,7 +54,9 @@ body {
   background-color: blueviolet;
 }
 .slider-thumb {
-  background-color: gold;
+  /* background-color: gold; */
+  background-image: url(./Coin.png);
+  background-size: cover;
   width: 6rem;
   height: 6rem;
   top: -3rem;
