@@ -21,9 +21,7 @@ class App extends Component {
   state = {
     rangeValue: 0,
     targets: [
-      { name: "hoodie", price: 30, total: 0, id: 0 },
-      { name: "playstation", price: 300, total: 0, id: 1 },
-      { name: "mercedes", price: 30000, total: 0, id: 2 }
+      { name: "hoodie", price: 1000, total: 0},
     ],
     selectedTarget: "",
     savingsHoodie: 0,
@@ -104,21 +102,9 @@ class App extends Component {
              }
            }, 10);
                        
-           if(target === "playstation") {
-               this.setState((prevState,props) => ({
-                   savingsPlaystation : prevState.savingsPlaystation + (amount*0.1)
-               }));
-           }
-           if(target === "hoodie") {
-               this.setState((prevState,props) => ({
-                   savingsHoodie : prevState.savingsHoodie + (amount*0.1)
-               }));
-           }
-           if(target === "mercedes") {
-               this.setState((prevState,props) => ({
-                   savingsMercedes : prevState.savingsMercedes + (amount*0.1)
-               }));
-           }
+           this.setState((prevState,props) => ({
+                   savingsHoodie : prevState.savingsHoodie + Math.round(amount * 0.1)
+           }));
         },3000);
     }
   };
@@ -164,12 +150,9 @@ class App extends Component {
     return (
       <div className="App">
         <div className="app-header">
-          <button className="btn btn-secondary" onClick={() => this.handleSavingsPopup()}>
+          <button className="btn btn-outline-dark my-3" onClick={() => this.handleSavingsPopup()}>
             Show savings
           </button>
-          {this.state.selectedTarget !== "" ? null : (
-            <h1 className="text-dark">Please select target</h1>
-          )}
           <div className="CancelContainer" onClick={this.handleCancelTimer}>
               <div className="CancelTimer" id="cancelTimer">
                 <button className="cancelButton"><img style={{height:100, width:100}} src={cancel}/></button>
@@ -185,7 +168,8 @@ class App extends Component {
             {this.state.selectedTarget === "" ? null : (
               <ReactSlider
                 min={0}
-                max={this.state.selectedTarget.price}
+                max={1000}
+                step={10}
                 value={this.state.rangeValue}
                 className="vertical-slider"
                 thumbClassName="slider-thumb"
@@ -196,7 +180,7 @@ class App extends Component {
                 )}
                 onChange={e => {this.setState({ rangeValue: e });document.getElementById('progressContainer').style.opacity = 0.45;}}
                 onAfterChange={value =>
-                  this.handleNewSaving(this.state.selectedTarget.name, Math.round(value))
+                  this.handleNewSaving(this.state.selectedTarget.name, value)
                 }
               />
             )}
@@ -206,7 +190,7 @@ class App extends Component {
                 <BorderLinearProgress
                     variant="determinate"
                     color="secondary"
-                    value={this.state.savingsHoodie * 100 / 30}
+                    value={this.state.savingsHoodie * 100 / 1000}
                 />
                 </div>
                 <div className="nameDiv_frst">

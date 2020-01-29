@@ -52,7 +52,7 @@ body {
 }
 .vertical-slider {
   height: 100%;
-  transition-duration: 1s;
+  transition-duration: 0.5s;
 }
 
 .slider-container {
