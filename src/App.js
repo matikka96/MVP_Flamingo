@@ -84,7 +84,7 @@ class App extends Component {
         document.getElementById("progressContainer").style.opacity = 1;
         if (amount !== 0) {
           this.setState({
-            savings: [...this.state.savings, { target, amount: amount / 10 }]
+            savings: [...this.state.savings, { target, amount: Math.round(amount / 10) }]
           });
         }
 
