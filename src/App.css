@@ -139,11 +139,22 @@ body {
     position: relative;
     height: 10vh;
     width: 90vw;
-    margin-top: 2vh;
+    margin-top: 4vh;
 }
 
-.nameDiv {
+.nameDiv_frst {
     position: absolute;
+    margin-top: 5.6vh;
+}
+
+.nameDiv_sec {
+    position: absolute;
+    margin-top: 18.7vh;
+}
+
+.nameDiv_thrd {
+    position: absolute;
+    margin-top: 32.2vh;
 }
 
 .progressLabel {
