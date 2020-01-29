@@ -35,11 +35,9 @@ class App extends Component {
     timerOn: false,
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedTarget !== this.state.selectedTarget) {
-      console.log("target changed");
-      this.setState({ rangeValue: 0 });
-    }
+  componentDidMount() {
+    this.setState({ selectedTarget: this.state.targets[0] });
+      this.setState({rangeValue: 0});
   }
     
   handleCancelTimer = () => {
@@ -198,41 +196,21 @@ class App extends Component {
                 )}
                 onChange={e => {this.setState({ rangeValue: e });document.getElementById('progressContainer').style.opacity = 0.45;}}
                 onAfterChange={value =>
-                  this.handleNewSaving(this.state.selectedTarget.name, value)
+                  this.handleNewSaving(this.state.selectedTarget.name, Math.round(value))
                 }
               />
             )}
           </div>
           <div className="SavingsList" id="progressContainer">
-                <div className="ProgressBar" onClick={this.handleProgressBarClick(0)}>
+                <div className="ProgressBar">
                 <BorderLinearProgress
                     variant="determinate"
                     color="secondary"
                     value={this.state.savingsHoodie * 100 / 30}
                 />
                 </div>
-                <div className="nameDiv_frst" onClick={this.handleProgressBarClick(0)}>
-                    <p className="progressLabel">Hoodie</p>
-                </div>
-                <div className="ProgressBar" onClick={this.handleProgressBarClick(1)}>
-                <BorderLinearProgress
-                    variant="determinate"
-                    color="secondary"
-                    value={this.state.savingsPlaystation * 100 / 300}
-                />
-                </div>
-                <div className="nameDiv_sec" onClick={this.handleProgressBarClick(1)}>
-                    <p className="progressLabel">Playstation</p>
-                </div>
-                <div className="ProgressBar" onClick={this.handleProgressBarClick(2)}>
-                <BorderLinearProgress
-                    variant="determinate"
-                    color="secondary"
-                    value={this.state.savingsMercedes * 100 / 30000}
-                />
-                </div>
-                <div className="nameDiv_thrd" onClick={this.handleProgressBarClick(2)}>
-                    <p className="progressLabel">Mercedes</p>
+                <div className="nameDiv_frst">
+                    <p className="progressLabel">{this.state.savingsHoodie}</p>
                 </div>
           </div>
         </div>
