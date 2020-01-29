@@ -19,9 +19,9 @@ class App extends Component {
   state = {
     rangeValue: 0,
     targets: [
-      { name: "hoodie", price: 30, total: 0, id: 0 },
-      { name: "playstation", price: 300, total: 0, id: 1 },
-      { name: "mercedes", price: 30000, total: 0, id: 2 }
+      { name: "Hoodie", price: 30, total: 0, id: 0 },
+      { name: "Playstation", price: 300, total: 0, id: 1 },
+      { name: "Mercedes", price: 30000, total: 0, id: 2 }
     ],
     selectedTarget: "",
     savingsHoodie: 0,
@@ -102,17 +102,17 @@ class App extends Component {
           }
         }, 10);
 
-        if (target === "playstation") {
+        if (target === "Playstation") {
           this.setState((prevState, props) => ({
             savingsPlaystation: prevState.savingsPlaystation + amount * 0.1
           }));
         }
-        if (target === "hoodie") {
+        if (target === "Hoodie") {
           this.setState((prevState, props) => ({
             savingsHoodie: prevState.savingsHoodie + amount * 0.1
           }));
         }
-        if (target === "mercedes") {
+        if (target === "Mercedes") {
           this.setState((prevState, props) => ({
             savingsMercedes: prevState.savingsMercedes + amount * 0.1
           }));
@@ -221,7 +221,7 @@ class App extends Component {
               <p
                 className="progressLabel"
                 style={
-                  this.state.selectedTarget.name === "hoodie"
+                  this.state.selectedTarget.name === "Hoodie"
                     ? { fontWeight: "bold" }
                     : { fontWeight: "normal" }
                 }
@@ -240,7 +240,7 @@ class App extends Component {
               <p
                 className="progressLabel"
                 style={
-                  this.state.selectedTarget.name === "playstation"
+                  this.state.selectedTarget.name === "Playstation"
                     ? { fontWeight: "bold" }
                     : { fontWeight: "normal" }
                 }
@@ -259,7 +259,7 @@ class App extends Component {
               <p
                 className="progressLabel"
                 style={
-                  this.state.selectedTarget.name === "mercedes"
+                  this.state.selectedTarget.name === "Mercedes"
                     ? { fontWeight: "bold" }
                     : { fontWeight: "normal" }
                 }
